@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Amsterdam temperatures</title>
+    <style>
+        :root { font-family: system-ui, sans-serif; color: #152238; background: #f5f8fc; }
+        body { margin: 0; padding: 2rem 1rem; }
+        main { max-width: 960px; margin: auto; background: white; padding: 2rem; border-radius: .75rem; box-shadow: 0 4px 18px #172f4d1a; }
+        h1 { margin-top: 0; } .summary { color: #536477; }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; } th, td { padding: .7rem; text-align: left; border-bottom: 1px solid #dce5ef; }
+        th { background: #edf4fb; } td:last-child { font-variant-numeric: tabular-nums; }
+        nav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; } a { color: #075b9a; }
+        .disabled { visibility: hidden; } @media (max-width: 550px) { main { padding: 1rem; } th, td { padding: .55rem .35rem; } }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Amsterdam temperatures</h1>
+    <p class="summary"><span th:text="${total}">0</span> readings, newest first.</p>
+    <table>
+        <thead><tr><th>Location</th><th>Date and time</th><th>Temperature</th></tr></thead>
+        <tbody>
+        <tr th:each="reading : ${readings}">
+            <td th:text="${reading.name}">Amsterdam</td>
+            <td th:text="${#temporals.format(reading.datetime, 'yyyy-MM-dd HH:mm')}">2000-01-01 00:00</td>
+            <td><span th:text="${reading.temperature}">4.8</span> °C</td>
+        </tr>
+        </tbody>
+    </table>
+    <nav aria-label="Pagination">
+        <a th:classappend="${page == 1} ? 'disabled'" th:href="@{/(page=${page - 1})}">← Previous</a>
+        <span>Page <span th:text="${page}">1</span> of <span th:text="${pageCount}">1</span></span>
+        <a th:classappend="${page == pageCount} ? 'disabled'" th:href="@{/(page=${page + 1})}">Next →</a>
+    </nav>
+</main>
+</body>
+</html>
